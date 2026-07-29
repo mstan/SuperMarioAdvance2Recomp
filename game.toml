@@ -1,0 +1,1745 @@
+# Super Mario Advance 2: Super Mario World (USA, Australia, AA2E, revision 0).
+
+[game]
+name = "Super Mario Advance 2: Super Mario World"
+short_name = "super_mario_world"
+
+[program]
+name = "Super Mario Advance 2: Super Mario World (USA, Australia)"
+id = "AA2E"
+load_address = 0x08000000
+size = 0x00400000
+entry_pc = 0x08000000
+speculative_literal_harvest = true
+codegen_shards = 16
+
+[identity]
+sha1 = "5101ddf223d1d918928fe1f306b63a42ada14a5e"
+md5 = "2f660377581b7e48c06131f56c791b72"
+
+[bios]
+path = "gbarecomp/bios/gba_bios.bin"
+sha1 = "300c20df6731a33952ded8c436f7f186d25d3492"
+hle = true
+
+[rom]
+path = "roms/super_mario_world_usa.gba"
+sha1 = "5101ddf223d1d918928fe1f306b63a42ada14a5e"
+
+[save]
+type = "eeprom"
+size = 8192
+path = "saves/super_mario_world_usa.sav"
+
+[runtime]
+debug_port = 19877
+window_title = "SuperMarioWorldRecomp"
+
+[video]
+screen = "frontlit"
+view_width = 240
+resize_view = false
+
+[audio]
+shadow = false
+
+# Clean-ROM IWRAM copies observed during the opening/attract path.
+[[code_copy]]
+runtime_start = 0x03001518
+source_start = 0x0809DCDC
+size = 0x360
+name = "iwram_sound_mixer"
+
+[[extra_func]]
+addr = 0x03001518
+source_addr = 0x0809DCDC
+mode = "arm"
+note = "Observed clean-ROM entry into the copied sound mixer."
+
+[[code_copy]]
+runtime_start = 0x03002364
+source_start = 0x080000FC
+size = 0x800
+name = "iwram_irq_and_runtime_helpers"
+
+[[extra_func]]
+addr = 0x03002364
+source_addr = 0x080000FC
+mode = "arm"
+note = "Observed clean-ROM entry into the copied IRQ/runtime helper block."
+
+# Clean-ROM opening/attract dispatch and asynchronous resume points.
+
+[[extra_func]]
+addr = 0x080003FC
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08000412
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08000424
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0800043A
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08000530
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08000532
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08000534
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080005D0
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080005E8
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0800060E
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0800063C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0800065A
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08000670
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0800067C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08000698
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080006E4
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080006FC
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0800070C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08000734
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08000750
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08000754
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08000758
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080007C4
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080007D4
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080007DC
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0800088C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08000A48
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08000A68
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08000ADC
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08000B3C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08000BD8
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08000C3A
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08000D7C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08000DAC
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08000E20
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08000E64
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0800109A
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080010D6
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080011AA
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08001F40
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08001F4C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08001F5A
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08001F64
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08001F6E
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08001F78
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0800204C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002078
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080020A2
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0800211E
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002136
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0800214C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002168
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080021B0
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080021C4
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002218
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0800223A
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0800238A
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002AA8
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002B58
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002B72
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002B82
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002B90
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002BB2
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002BC6
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002BD8
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002C60
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002C88
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002C8C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002C90
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002C96
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002CCA
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002CD8
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002CE2
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002CEE
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002CF8
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002D04
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002D10
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002D26
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002D32
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002D3C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002D4A
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002D62
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002D66
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002D6A
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002D74
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002D78
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002D7C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002E04
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002E0A
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002E30
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002E52
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002ECA
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002ECE
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08002FD0
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080031D8
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080031F4
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0800321A
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08003234
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08003250
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080032EC
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08003318
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0800333C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08003372
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08003384
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08003396
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080033DE
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08003E90
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08005526
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0800552C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08005630
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08005640
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0800566C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080082E8
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0800834C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08008368
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08008F20
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08008F34
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0801DD80
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0801DDEC
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0801DE00
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0801DE50
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071A60
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071A76
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071A88
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071A9C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071B50
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071C40
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071C54
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071CA4
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071CB6
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071CBA
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071CCA
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071D1C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071D2E
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071D4C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071D64
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071DAC
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071DC8
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071DFC
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071E0A
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071E18
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071E44
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071E68
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071E7C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071FB8
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071FBE
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08071FE4
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08073AA0
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08073AEC
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08073AF4
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08073AFC
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08073B04
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08073B28
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08073B4E
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08073B54
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08073E58
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08073E6A
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08073E90
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08073EA8
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08073EB8
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08073EE0
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08073F3C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08073F4C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08073F60
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08073F7C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08073F82
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080740BC
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08074180
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080741A4
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080741C0
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080741C6
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080742A4
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080742C0
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080742F4
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x080742F6
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08074302
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08074346
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0807434A
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08074350
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0807435C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08074376
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0807439A
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x08075064
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0807510E
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809B258
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809B348
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809B36A
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809B60E
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809B674
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809B6A6
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809B728
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809BA80
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C088
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C18C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C1B8
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C1E4
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C1E6
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C20C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C244
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C24C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C25E
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C368
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C380
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C39A
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C3F2
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C4CC
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C4DA
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C4E0
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C4E6
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C518
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C51E
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C534
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C53C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C570
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C578
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C588
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C58C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C5A2
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C5D0
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C5DA
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C610
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809C626
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809CA26
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809CA82
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809CAB8
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809CAC4
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809CBB8
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809CBEC
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809CBF2
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809CC3C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809CC44
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809CF9C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809CFD8
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809D054
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809D060
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809D062
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809D06E
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809D078
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809D082
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809D086
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809D3E0
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809D3E8
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809D420
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809D446
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809D448
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809D468
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809D560
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809D56C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809D57C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809D58E
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809D85A
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809D882
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809D9C8
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E1CC
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E296
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E2A4
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E440
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E448
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E44C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E478
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E48E
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E494
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E49C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E4AA
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E4AC
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E4BA
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E4C2
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E4F2
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E4FC
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E510
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E522
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E530
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E532
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E540
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E548
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E554
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E560
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E56C
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
+
+[[extra_func]]
+addr = 0x0809E578
+mode = "thumb"
+resume = true
+note = "Observed during the clean-ROM opening/attract path."
