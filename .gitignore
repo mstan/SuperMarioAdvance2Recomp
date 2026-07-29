@@ -25,6 +25,8 @@ keybinds.ini
 recomp_coverage*.json
 recomp_master_misses*.toml.frag
 recomp_seed_proposals.toml
+/_aot_*
+/artifacts/
 .vs/
 .vscode/
 __pycache__/

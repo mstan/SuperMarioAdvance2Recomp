@@ -11,7 +11,10 @@ load_address = 0x08000000
 size = 0x00400000
 entry_pc = 0x08000000
 speculative_literal_harvest = true
-codegen_shards = 16
+aot_scan_start = 0x080000C0
+aot_scan_end = 0x080A0000
+static_resume_all = true
+codegen_shards = 64
 
 [identity]
 sha1 = "5101ddf223d1d918928fe1f306b63a42ada14a5e"
