@@ -41,7 +41,8 @@ window_title = "SuperMarioWorldRecomp"
 [video]
 screen = "frontlit"
 view_width = 240
-resize_view = false
+# Adaptive widescreen is a disabled-by-default feature in the Mods catalog.
+# Its state is persisted in mods/state.toml rather than this display section.
 
 [audio]
 shadow = false

@@ -11,6 +11,8 @@ set(RECOMP_UI_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/recomp-ui"
     CACHE PATH "Path to the shared recomp-ui checkout")
 set(GBARECOMP_RUNTIME_UI_ROOT "${RECOMP_UI_ROOT}"
     CACHE PATH "recomp-ui root used by the live GBA runtime adapter")
+set(GBARECOMP_ENABLE_MODS ON CACHE BOOL
+    "Enable Super Mario World's built-in mod catalog" FORCE)
 if(NOT EXISTS "${GBARECOMP_ROOT}/CMakeLists.txt")
     message(FATAL_ERROR
         "GBARECOMP_ROOT is not a gbarecomp checkout:\n"
@@ -32,6 +34,7 @@ file(GLOB GAME_GENERATED_SOURCES CONFIGURE_DEPENDS
 add_executable(SuperMarioWorldRecomp
     src/main.cpp
     src/smw_extended_view.cpp
+    src/mods/smw_adaptive_view_plugin.cpp
     ${GAME_GENERATED_SOURCES})
 
 set(GAME_RECOMPILED_SOURCES ${GAME_GENERATED_SOURCES})
@@ -69,6 +72,8 @@ if(GBAGAME_RECOMP_UI)
         "${GBARECOMP_ROOT}/src/runtime"
         "${GBARECOMP_ROOT}/src/gba"
         src)
+    target_compile_definitions(game_launcher_ui PRIVATE
+        GBARECOMP_ENABLE_MODS=1)
     recomp_target_launcher_ui(game_launcher_ui CONSOLE gba)
     find_package(SDL2 REQUIRED)
     target_link_libraries(game_launcher_ui PUBLIC SDL2::SDL2)
@@ -78,6 +83,17 @@ if(GBAGAME_RECOMP_UI)
     target_link_libraries(SuperMarioWorldRecomp PRIVATE game_launcher_ui)
     set_property(SOURCE src/main.cpp APPEND PROPERTY
         COMPILE_DEFINITIONS GBAGAME_RECOMP_UI)
+endif()
+
+# Ship the game-owned, disabled-by-default adaptive-view package beside the
+# executable. User-installed .gbamod archives join this same catalog.
+set(SMW_PRELOADED_MODS "${CMAKE_CURRENT_SOURCE_DIR}/mods/preloaded")
+if(EXISTS "${SMW_PRELOADED_MODS}/packages")
+    add_custom_command(TARGET SuperMarioWorldRecomp POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${SMW_PRELOADED_MODS}"
+            "$<TARGET_FILE_DIR:SuperMarioWorldRecomp>/mods"
+        COMMENT "Preloading the Super Mario World mod catalog")
 endif()
 
 if(MSVC)

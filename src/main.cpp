@@ -24,13 +24,16 @@ int main(int argc, char** argv) {
     opts.builtin_game_name = "Super Mario Advance 2: Super Mario World";
     opts.builtin_rom_sha1 = "5101ddf223d1d918928fe1f306b63a42ada14a5e";
     opts.builtin_rom_crc32 = 0x5206880Au;
+    opts.mod_game_id = "super-mario-world-us";
+    opts.mod_owns_adaptive_view = true;
 
     // Super Mario World's renderer streams scrolling tile maps around the
     // native viewport. Adaptive view exposes the useful surrounding columns
     // while keeping the original 240x160 mode as the faithful default.
     opts.max_resize_view_width = 288;
     opts.resize_driven_view = true;
-    opts.launcher_expose_adaptive_view = true;
+    opts.launcher_expose_widescreen = false;
+    opts.launcher_expose_adaptive_view = false;
     opts.extended_view_init = smw::install_extended_view;
 
     opts.launcher_region = "USA";

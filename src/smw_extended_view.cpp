@@ -38,10 +38,13 @@ void trace_scene_once() {
     };
     std::fprintf(stderr,
         "[smw:extended-view] frame=%llu DISPCNT=%04X "
-        "BG=%04X/%04X/%04X/%04X WIN=%04X/%04X/%04X/%04X\n",
+        "BG=%04X/%04X/%04X/%04X WIN=%04X/%04X/%04X/%04X "
+        "authored=%d pillarbox=%d/%d/%d\n",
         g_runtime_vblank_starts, read16(0x00), read16(0x08),
         read16(0x0A), read16(0x0C), read16(0x0E), read16(0x40),
-        read16(0x42), read16(0x48), read16(0x4A));
+        read16(0x42), read16(0x48), read16(0x4A),
+        gba::g_ws_authored_margin_layers, gba::g_ws_pillarbox,
+        gba::g_ws_pillarbox_left, gba::g_ws_pillarbox_right);
 }
 
 int streamed_tilemap_provider(int bg, int hw_x, int screen_y,

@@ -1,0 +1,24 @@
+format_version = 1
+id = "super-mario-world.enhancement.adaptive-view"
+version = "1.0.0"
+name = "Super Mario World Adaptive Widescreen"
+author = "mstan"
+description = "Reveals the nearby streamed columns in Super Mario World's maps and stages as the window widens, while preserving native presentation for unsupported scenes."
+license = "MIT"
+resolver = "declarative"
+save_compatibility = "shared"
+
+[[target]]
+game_id = "super-mario-world-us"
+rom_sha1 = "5101ddf223d1d918928fe1f306b63a42ada14a5e"
+
+[[feature]]
+id = "adaptive-view"
+name = "Adaptive Widescreen"
+description = "Expand the logical view from native 3:2 up to 9:5, following the live window or fullscreen aspect ratio."
+group = "Display"
+default_enabled = false
+
+[[plugin]]
+feature = "adaptive-view"
+id = "super-mario-world.adaptive-view"

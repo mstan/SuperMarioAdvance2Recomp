@@ -48,12 +48,17 @@ dispatch misses.
 ## Launcher and adaptive widescreen
 
 The default build includes the shared `recomp-ui` pre-boot launcher. Native
-240x160 remains the faithful default; **Adaptive** is an experimental,
-opt-in display mode that follows the live window aspect ratio up to 288x160.
-Resize the game window after launch to exercise the adaptive view.
+240x160 remains the faithful default. Open **Mods** and enable
+**Adaptive Widescreen** to opt into the game-owned extended view. Its state is
+persisted in `mods/state.toml`; legacy display settings cannot bypass the mod's
+ROM and plugin validation.
+
+The logical view follows the live window or fullscreen aspect ratio up to
+288x160 (9:5). Resize the game window after launch to exercise it.
 
 The current game adapter exposes SMA2's streamed background tile ring in the
 new margins. Menus and HUD elements remain centered in the original 240-pixel
 safe area, and the sprite-composed title is automatically pillarboxed to avoid
-exposing its off-screen staging pieces. Wider-than-288 layouts, off-screen actor
-spawning, and scene-specific HUD anchoring remain future validation work.
+exposing its off-screen staging pieces. SMA2's stock level streamer only keeps
+the nearby tile columns populated; exposing wider views requires a host-side
+level streamer plus off-screen actor spawning and scene-specific HUD work.
