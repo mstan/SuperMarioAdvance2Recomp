@@ -7,6 +7,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(GBARECOMP_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/gbarecomp"
     CACHE PATH "Path to this game's gbarecomp worktree")
+set(RECOMP_UI_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/recomp-ui"
+    CACHE PATH "Path to the shared recomp-ui checkout")
+set(GBARECOMP_RUNTIME_UI_ROOT "${RECOMP_UI_ROOT}"
+    CACHE PATH "recomp-ui root used by the live GBA runtime adapter")
 if(NOT EXISTS "${GBARECOMP_ROOT}/CMakeLists.txt")
     message(FATAL_ERROR
         "GBARECOMP_ROOT is not a gbarecomp checkout:\n"
@@ -27,6 +31,7 @@ file(GLOB GAME_GENERATED_SOURCES CONFIGURE_DEPENDS
 
 add_executable(SuperMarioWorldRecomp
     src/main.cpp
+    src/smw_extended_view.cpp
     ${GAME_GENERATED_SOURCES})
 
 set(GAME_RECOMPILED_SOURCES ${GAME_GENERATED_SOURCES})
@@ -55,6 +60,25 @@ target_compile_definitions(SuperMarioWorldRecomp PRIVATE
     GBARECOMP_DEFAULT_DEBUG_PORT=19877
     GBARECOMP_WINDOW_TITLE="SuperMarioWorldRecomp"
     GBARECOMP_DEFAULT_GAME_CONFIG="game.toml")
+
+option(GBAGAME_RECOMP_UI "Build the recomp-ui pre-boot launcher" ON)
+if(GBAGAME_RECOMP_UI)
+    include(${RECOMP_UI_ROOT}/recomp_ui.cmake)
+    add_library(game_launcher_ui STATIC src/game_launcher_boot.cpp)
+    target_include_directories(game_launcher_ui PRIVATE
+        "${GBARECOMP_ROOT}/src/runtime"
+        "${GBARECOMP_ROOT}/src/gba"
+        src)
+    recomp_target_launcher_ui(game_launcher_ui CONSOLE gba)
+    find_package(SDL2 REQUIRED)
+    target_link_libraries(game_launcher_ui PUBLIC SDL2::SDL2)
+    if(WIN32)
+        target_link_libraries(game_launcher_ui PUBLIC opengl32)
+    endif()
+    target_link_libraries(SuperMarioWorldRecomp PRIVATE game_launcher_ui)
+    set_property(SOURCE src/main.cpp APPEND PROPERTY
+        COMPILE_DEFINITIONS GBAGAME_RECOMP_UI)
+endif()
 
 if(MSVC)
     target_link_options(SuperMarioWorldRecomp PRIVATE /STACK:16777216)
