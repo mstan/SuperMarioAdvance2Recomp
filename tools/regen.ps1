@@ -28,7 +28,8 @@ if ($biosActual -ne $biosExpected) {
     throw "GBA BIOS SHA-1 mismatch: got $biosActual expected $biosExpected"
 }
 
-& $tool --bios $biosPath `
+$biosConfig = Join-Path $engine 'bios\gba_bios.toml'
+& $tool --bios $biosPath --config $biosConfig `
     --out (Join-Path $engine 'src\runtime\generated_bios')
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 

@@ -116,10 +116,13 @@ if (-not (Test-Path -LiteralPath (Join-Path $assets 'img'))) {
 Copy-Item -LiteralPath $assets -Destination $stage -Recurse
 
 $mods = Join-Path $build 'mods'
-if (-not (Test-Path -LiteralPath (Join-Path $mods 'packages'))) {
+$modPackages = Join-Path $mods 'packages'
+if (-not (Test-Path -LiteralPath $modPackages)) {
     throw "Preloaded mod catalog is missing: $mods"
 }
-Copy-Item -LiteralPath $mods -Destination $stage -Recurse
+$stagedMods = Join-Path $stage 'mods'
+New-Item -ItemType Directory -Force -Path $stagedMods | Out-Null
+Copy-Item -LiteralPath $modPackages -Destination $stagedMods -Recurse
 
 & (Join-Path $engine 'tools\fetch_tcc.ps1') `
     -Toolchain (Join-Path $stage 'overlay_toolchain') -EngineRoot $engine
