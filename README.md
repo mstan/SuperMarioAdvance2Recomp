@@ -1,64 +1,87 @@
-# SuperMarioWorldRecomp
+# Super Mario Advance 2 Recomp
 
-Static recompilation scaffold for **Super Mario Advance 2: Super Mario World**
-(USA, Australia) using a dedicated GBARecomp worktree.
+Experimental static recompilation of **Super Mario Advance 2: Super Mario
+World** (USA, Australia) for Windows x64, built with
+[gbarecomp](https://github.com/mstan/gbarecomp) and the shared
+[recomp-ui](https://github.com/mstan/recomp-ui) launcher.
 
-The ROM, generated sources, build outputs, and saves remain local and ignored.
+This repository never includes Nintendo game data. Supply your own legally
+obtained retail GBA BIOS and matching cartridge dump.
+
+## Status
+
+- The 6,000-frame attract route passes in strict static mode with zero dispatch
+  misses or interpreted instructions.
+- The pre-boot launcher supports ROM/BIOS selection, display, audio, input, and
+  mod configuration.
+- Adaptive Widescreen is included as an optional, disabled-by-default mod.
+- This remains an experimental preview. Back up important saves and expect
+  incomplete scene-specific widescreen handling.
+
+## Required files
+
+- Super Mario Advance 2: Super Mario World (USA, Australia)
+  - SHA-1: `5101ddf223d1d918928fe1f306b63a42ada14a5e`
+- Retail 16 KiB `gba_bios.bin`
+  - SHA-1: `300c20df6731a33952ded8c436f7f186d25d3492`
+
+ROMs, BIOS images, generated ROM-derived source, saves, caches, and build
+outputs are ignored by Git and excluded from release archives.
+
+## Clone and build
 
 ```powershell
+git clone --recurse-submodules `
+  https://github.com/mstan/SuperMarioAdvance2Recomp.git
+cd SuperMarioAdvance2Recomp
+
+# Put your verified ROM at roms/super_mario_world_usa.gba and your BIOS at
+# gbarecomp/bios/gba_bios.bin. Build the local generator, then generate the
+# ignored BIOS and cartridge sources.
+C:\msys64\mingw64\bin\cmake.exe -S gbarecomp -B gbarecomp/build -G Ninja `
+  -DCMAKE_BUILD_TYPE=Release
+C:\msys64\mingw64\bin\cmake.exe `
+  --build gbarecomp/build --target gba_recompile --parallel
 pwsh tools/regen.ps1
+
 C:\msys64\mingw64\bin\cmake.exe -S . -B build -G Ninja `
   -DCMAKE_BUILD_TYPE=Release `
   -DCMAKE_C_COMPILER=C:/msys64/mingw64/bin/gcc.exe `
   -DCMAKE_CXX_COMPILER=C:/msys64/mingw64/bin/g++.exe
-C:\msys64\mingw64\bin\cmake.exe --build build --target SuperMarioWorldRecomp --parallel
+C:\msys64\mingw64\bin\cmake.exe `
+  --build build --target SuperMarioWorldRecomp --parallel
 ```
 
-## Attract-demo smoke test
-
-The bounded smoke test runs 6,000 no-input frames through GBARecomp's
-whole-program interpreter oracle and captures the resulting title screen after
-the attract demo:
+To create the sanitized Windows archive:
 
 ```powershell
-pwsh tools/smoke-attract.ps1
+pwsh tools/make_release.ps1 -Version 0.0.1
 ```
 
-The expected capture is `artifacts/attract-complete.png`. The interpreter
-backend is intentional for this first correctness milestone; native static
-coverage is scaffolded and can be expanded independently.
+The packager rejects ROMs, BIOS images, saves, generated source, developer
+configuration, and diagnostic artifacts before creating the zip.
 
-## Strict AOT coverage
+## Validation
 
-`game.toml` enables the bounded AOT scanner over the executable ROM range. It
-combines direct CFG discovery with reachable callback-table harvesting while
-retaining reviewed RAM code-copy evidence. Full static-resume mode also emits a
-native entry for every interruptible instruction boundary.
-
-After generating and building the `build-aot` target, run:
+Run the strict native acceptance gate after generating and building
+`build-aot`:
 
 ```powershell
-.\tools\coverage-attract.ps1
+pwsh tools/coverage-attract.ps1 -Frames 6000
 ```
 
-The gate disables cached overlays and interpreter bridging. It succeeds only
-when all 6,000 attract frames complete with `FULLY_STATIC` coverage and zero
-dispatch misses.
+The gate disables interpreter and overlay fallback. It succeeds only when all
+6,000 frames complete with `FULLY_STATIC` coverage and zero dispatch misses.
 
-## Launcher and adaptive widescreen
+## Adaptive Widescreen
 
-The default build includes the shared `recomp-ui` pre-boot launcher. Native
-240x160 remains the faithful default. Open **Mods** and enable
-**Adaptive Widescreen** to opt into the game-owned extended view. Its state is
-persisted in `mods/state.toml`; legacy display settings cannot bypass the mod's
-ROM and plugin validation.
+Native 240x160 remains the faithful default. Open **Mods** and enable
+**Adaptive Widescreen** to let the logical view follow the live window or
+fullscreen aspect ratio up to 288x160 (9:5).
 
-The logical view follows the live window or fullscreen aspect ratio up to
-288x160 (9:5). Resize the game window after launch to exercise it.
+The adapter exposes SMA2's nearby streamed background columns while keeping
+menus, HUD elements, and the sprite-composed title in the original safe area.
+Some scenes retain the native view because the stock game does not populate
+enough off-screen level or actor data.
 
-The current game adapter exposes SMA2's streamed background tile ring in the
-new margins. Menus and HUD elements remain centered in the original 240-pixel
-safe area, and the sprite-composed title is automatically pillarboxed to avoid
-exposing its off-screen staging pieces. SMA2's stock level streamer only keeps
-the nearby tile columns populated; exposing wider views requires a host-side
-level streamer plus off-screen actor spawning and scene-specific HUD work.
+This project is part of the R.A.I.D. static-recompilation community.

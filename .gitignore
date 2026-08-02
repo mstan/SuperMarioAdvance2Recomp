@@ -1,11 +1,14 @@
 roms/
 /gbarecomp
+*.gba
+*.GBA
 generated/*.c
 generated/*.cpp
 generated/*.h
 generated/*.json
 build/
 build-*/
+release-stage/
 recomp_cache/
 saves/
 *.sav
@@ -21,6 +24,7 @@ saves/
 *.bin
 bios.cfg
 rom.cfg
+config.ini
 keybinds.ini
 recomp_coverage*.json
 recomp_master_misses*.toml.frag
