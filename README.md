@@ -17,7 +17,7 @@ own legally obtained dumps.
 ## Status
 
 The game boots and runs through its opening and attract sequence. The current
-`v0.0.2` build is an experimental release, and the widescreen work is still
+`v0.0.3` build is an experimental release, and the widescreen work is still
 being refined scene by scene. Back up important saves and report any
 repeatable gameplay or visual problems.
 
@@ -90,7 +90,7 @@ code, copyrighted inputs, saves, and build output remain local and are never
 included in releases.
 
 Contributors can run `pwsh tools/coverage-attract.ps1` for the automated native
-acceptance route and `pwsh tools/make_release.ps1 -Version 0.0.2` to build a
+acceptance route and `pwsh tools/make_release.ps1 -Version 0.0.3` to build a
 sanitized Windows package.
 
 ## License
