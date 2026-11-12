@@ -34,14 +34,19 @@ launcher on boot** if you want later launches to go directly into the game.
 
 ## Adaptive Widescreen
 
-Open the launcher's **Mods** page to enable **Adaptive Widescreen**. It renders
+**Adaptive Widescreen** is enabled for new installations. It renders
 additional game content at the sides instead of stretching the original
 240×160 image.
 
-The mod is disabled by default. Menus and HUD elements remain in the original
+Existing saved choices are preserved. Menus and HUD elements remain in the original
 safe area, while supported gameplay scenes can expand up to 9:5. Some scenes
 intentionally retain the original view where the game does not prepare enough
 off-screen level or actor data.
+
+For smoother pixel edges, enable **HQ2x** in the launcher's **Mods** page. This
+optional display filter is disabled by default and leaves game behavior unchanged.
+It uses additional CPU time and memory. The replaceable filter library and its
+LGPL source are included under `third-party/hqx`.
 
 ## Features
 

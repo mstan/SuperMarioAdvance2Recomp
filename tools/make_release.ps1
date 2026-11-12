@@ -101,6 +101,15 @@ if (Test-Path -LiteralPath $stage) {
 }
 New-Item -ItemType Directory -Force -Path $stage | Out-Null
 Copy-Item -LiteralPath $exe -Destination $stage
+$hqx = Join-Path $build 'gbarecomp-hqx.dll'
+$hqxSource = Join-Path $build 'third-party/hqx'
+if (-not (Test-Path -LiteralPath $hqx) -or
+    -not (Test-Path -LiteralPath (Join-Path $hqxSource 'COPYING'))) {
+    throw 'The HQ2x shared library and corresponding source are required.'
+}
+Copy-Item -LiteralPath $hqx -Destination $stage
+New-Item -ItemType Directory -Path (Join-Path $stage 'third-party') | Out-Null
+Copy-Item -LiteralPath $hqxSource -Destination (Join-Path $stage 'third-party') -Recurse
 foreach ($dll in $dlls) {
     $source = Join-Path $mingwBin $dll
     if (-not (Test-Path -LiteralPath $source)) {
@@ -134,7 +143,7 @@ if ($LASTEXITCODE -ne 0) {
 # Super Mario Advance 2: Super Mario World - Windows x64
 
 This experimental v$Version preview runs the USA/Australia retail game through
-gbarecomp with the recomp-ui launcher and optional Adaptive Widescreen mod.
+gbarecomp with the recomp-ui launcher, Adaptive Widescreen, and optional HQ2x.
 
 ## How to run
 
@@ -144,7 +153,8 @@ gbarecomp with the recomp-ui launcher and optional Adaptive Widescreen mod.
 3. Select your legally obtained Super Mario Advance 2 ROM.
    Expected SHA-1: $expectedSha1
 4. Select your legally obtained retail 16 KiB gba_bios.bin.
-5. Open Mods to opt into Adaptive Widescreen, then select PLAY.
+5. Configure display and controls, then select PLAY. Adaptive Widescreen is on
+   for new installations; the optional HQ2x filter can be enabled under Mods.
 
 The ROM and retail GBA BIOS are not included. Supply your own dumps.
 
