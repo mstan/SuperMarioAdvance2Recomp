@@ -12,6 +12,8 @@ param(
     [Parameter(Mandatory = $true)][string]$Version,
     [string]$BuildDir = 'build-release',
     [string]$GbarecompRoot = '',
+    [string]$RecompUiRoot = '',
+    [string]$GeneratedBiosDir = '',
     [ValidateRange(1, 32)][int]$Jobs = 4
 )
 
@@ -26,7 +28,11 @@ $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $root = (Resolve-Path (Join-Path $scriptDir '..')).Path
 if (-not $GbarecompRoot) { $GbarecompRoot = Join-Path $root 'gbarecomp' }
 $engine = (Resolve-Path $GbarecompRoot).Path
-$build = Join-Path $root $BuildDir
+if (-not $RecompUiRoot) { $RecompUiRoot = Join-Path $root 'recomp-ui' }
+$uiRoot = (Resolve-Path -LiteralPath $RecompUiRoot).Path
+if (-not $GeneratedBiosDir) { $GeneratedBiosDir = Join-Path $engine 'src/runtime/generated_bios' }
+$generatedBios = (Resolve-Path -LiteralPath $GeneratedBiosDir).Path
+$build = if ([IO.Path]::IsPathRooted($BuildDir)) { [IO.Path]::GetFullPath($BuildDir) } else { Join-Path $root $BuildDir }
 $out = Join-Path $root 'release-stage'
 $target = 'SuperMarioWorldRecomp'
 $package = 'SuperMarioAdvance2Recomp'
@@ -48,9 +54,9 @@ foreach ($required in @(
     (Join-Path $mingwBin 'strip.exe'),
     (Join-Path $engine 'CMakeLists.txt'),
     (Join-Path $engine 'tools\fetch_tcc.ps1'),
-    (Join-Path $engine 'src\runtime\generated_bios\bios_recompiled.cpp'),
-    (Join-Path $engine 'src\runtime\generated_bios\bios_recompiled.h'),
-    (Join-Path $root 'recomp-ui\recomp_ui.cmake')
+    (Join-Path $generatedBios 'bios_recompiled.cpp'),
+    (Join-Path $generatedBios 'bios_recompiled.h'),
+    (Join-Path $uiRoot 'recomp_ui.cmake')
 )) {
     if (-not (Test-Path -LiteralPath $required)) {
         throw "Required release dependency is missing: $required"
@@ -71,9 +77,12 @@ New-Item -ItemType Directory -Force -Path $out | Out-Null
     -DCMAKE_CXX_COMPILER="$mingwBin/c++.exe" `
     -DCMAKE_MAKE_PROGRAM="$mingwBin/ninja.exe" `
     -DCMAKE_BUILD_TYPE=Release `
-    "-DCMAKE_CXX_FLAGS_RELEASE=-O1 -DNDEBUG" `
+    "-DGAME_BUILD_VERSION=$Version" `
+    "-DGBARECOMP_GENERATED_BIOS_DIR=$generatedBios" `
+    "-DCMAKE_CXX_FLAGS_RELEASE=-O3 -DNDEBUG" `
     -DGBARECOMP_ROOT="$engine" `
-    -DRECOMP_UI_ROOT="$root/recomp-ui" `
+    -DRECOMP_UI_ROOT="$uiRoot" `
+    -DGBARECOMP_RUNTIME_UI_ROOT="$uiRoot" `
     -DGBARECOMP_BUILD_ORACLE=OFF `
     -DGBARECOMP_MINGW_PREFIX_UNIX='/c/msys64/mingw64' `
     -DSDL2_INCLUDE_DIR='C:/msys64/mingw64/include/SDL2' `
@@ -97,7 +106,13 @@ if (Test-Path -LiteralPath $stage) {
             "$resolvedOut\", [System.StringComparison]::OrdinalIgnoreCase)) {
         throw "Refusing to remove stage outside release output: $resolvedStage"
     }
-    Remove-Item -LiteralPath $resolvedStage -Recurse -Force
+    $stageItems = @(Get-Item -LiteralPath $resolvedStage) +
+        @(Get-ChildItem -LiteralPath $resolvedStage -Recurse -Force)
+    if ($stageItems | Where-Object {
+        ($_.Attributes -band [IO.FileAttributes]::ReparsePoint) -or
+        $_.Name -eq '.git'
+    }) { throw 'Refusing to remove a stage containing a link or repository.' }
+    Remove-Item -LiteralPath $resolvedStage -Recurse
 }
 New-Item -ItemType Directory -Force -Path $stage | Out-Null
 Copy-Item -LiteralPath $exe -Destination $stage
@@ -162,13 +177,31 @@ Project: https://github.com/mstan/SuperMarioAdvance2Recomp
 Engine: https://github.com/mstan/gbarecomp
 "@ | Out-File -LiteralPath (Join-Path $stage 'README.md') -Encoding utf8
 
+# Preserve only the authored runtime display model, not development metadata.
+$sourceToml = [IO.File]::ReadAllText((Join-Path $root 'game.toml'))
+$video = [regex]::Match($sourceToml, '(?ms)^\[video\]\s*\r?\n(.*?)(?=^\[|\z)')
+$screen = [regex]::Match($video.Groups[1].Value,
+    '(?m)^\s*screen\s*=\s*"([A-Za-z0-9_-]+)"\s*(?:#.*)?$')
+# No authored video.screen retains the runner's raw default.
+$screenName = if ($screen.Success) { $screen.Groups[1].Value } else { 'raw' }
+$runtimeConfig = "[video]`nscreen = `"$screenName`"`n"
+[IO.File]::WriteAllText((Join-Path $stage 'game.toml'), $runtimeConfig)
+$fontNotices = @('LatoLatin-OFL.txt', 'NotoSansSymbols2-OFL.txt', 'OpenMoji-LICENSE.txt')
+$fontNoticeStage = Join-Path $stage 'licenses/fonts'
+New-Item -ItemType Directory -Force -Path $fontNoticeStage | Out-Null
+foreach ($notice in $fontNotices) {
+    Copy-Item -LiteralPath (Join-Path $root "tools/release-licenses/$notice") -Destination $fontNoticeStage
+}
+& (Get-Command python.exe).Source (Join-Path $root 'tools/collect_licenses.py') `
+    $engine $uiRoot (Join-Path $stage 'licenses') --mingw (Split-Path $mingwBin)
+if ($LASTEXITCODE -ne 0) { throw 'Dependency notice staging failed.' }
+
 $forbidden = Get-ChildItem -LiteralPath $stage -Recurse -File |
     Where-Object {
         $_.Extension.ToLowerInvariant() -in @(
             '.gba', '.agb', '.bin', '.sav', '.srm', '.apk'
         ) -or
         $_.Name -in @(
-            'game.toml',
             'rom.cfg',
             'bios.cfg',
             'config.ini',
@@ -234,6 +267,16 @@ try {
     if ($rzBad.Count -ne 0) {
         throw "ZIP contains non-portable entry names: $(
             ($rzBad | ForEach-Object FullName) -join ', ')"
+    }
+    $runtimeEntry = $rzArchive.GetEntry('game.toml')
+    if ($null -eq $runtimeEntry) { throw 'Runtime display config missing from ZIP.' }
+    $reader = [IO.StreamReader]::new($runtimeEntry.Open(), [Text.Encoding]::UTF8)
+    try { $packagedConfig = $reader.ReadToEnd() } finally { $reader.Dispose() }
+    if ($packagedConfig -cne $runtimeConfig) { throw 'ZIP display config differs.' }
+    foreach ($notice in $fontNotices) {
+        if ($null -eq $rzArchive.GetEntry("licenses/fonts/$notice")) {
+            throw "Bundled font notice missing: $notice"
+        }
     }
     if ($rzArchive.Entries.Count -ne $rzFiles.Count) {
         throw "ZIP entry count mismatch: expected $($rzFiles.Count), got $(

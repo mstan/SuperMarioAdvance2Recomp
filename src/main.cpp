@@ -37,6 +37,7 @@ int main(int argc, char** argv) {
     opts.launcher_expose_adaptive_view = false;
     opts.extended_view_init = smw::install_extended_view;
 
+    opts.launcher_game_version = GBARECOMP_GAME_VERSION;
     opts.launcher_region = "USA";
     opts.launcher_game_config = "game.toml";
     opts.launcher_save_path = "saves/super_mario_world_usa.sav";

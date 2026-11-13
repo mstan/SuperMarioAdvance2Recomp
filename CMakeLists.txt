@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
-project(SuperMarioWorldRecomp C CXX)
+project(SuperMarioWorldRecomp VERSION 0.0.5 LANGUAGES C CXX)
+set(GAME_BUILD_VERSION "${PROJECT_VERSION}" CACHE STRING "Packaged game version")
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 20)
@@ -62,6 +63,7 @@ target_link_libraries(SuperMarioWorldRecomp PRIVATE
     "-Wl,--end-group")
 
 target_compile_definitions(SuperMarioWorldRecomp PRIVATE
+    GBARECOMP_GAME_VERSION="${GAME_BUILD_VERSION}"
     GBARECOMP_DEFAULT_DEBUG_PORT=19877
     GBARECOMP_WINDOW_TITLE="SuperMarioWorldRecomp"
     GBARECOMP_DEFAULT_GAME_CONFIG="game.toml")
