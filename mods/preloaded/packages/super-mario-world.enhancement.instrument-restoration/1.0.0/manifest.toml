@@ -1,9 +1,9 @@
 format_version = 1
 id = "super-mario-world.enhancement.instrument-restoration"
 version = "1.0.0"
-name = "Classic Instruments"
+name = "Restored Bongos and Horn"
 author = "mstan"
-description = "Optional support for the two USA Instrument Restoration 1.0 patches."
+description = "Optional restored Yoshi bongos and a lower-pitched horn."
 license = "MIT"
 resolver = "declarative"
 save_compatibility = "shared"
@@ -14,8 +14,8 @@ rom_sha1 = "5101ddf223d1d918928fe1f306b63a42ada14a5e"
 
 [[feature]]
 id = "instrument-restoration"
-name = "Classic Instruments"
-description = "Use restored Yoshi bongos and the lower-pitched horn. This changes two instruments, rather than replacing the soundtrack."
+name = "Restored Bongos and Horn"
+description = "Use restored Yoshi bongos and the lower-pitched horn on the next launch. Changes these two instruments, without replacing the soundtrack."
 group = "Audio"
 default_enabled = false
 

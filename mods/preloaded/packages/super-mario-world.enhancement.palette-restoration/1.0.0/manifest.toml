@@ -1,9 +1,9 @@
 format_version = 1
 id = "super-mario-world.enhancement.palette-restoration"
 version = "1.0.0"
-name = "Original Color Palette"
+name = "SNES-style Colors"
 author = "mstan"
-description = "Optional support for the USA Color Restoration 0.91 patch."
+description = "Optional SNES-style colors for the covered Super Mario World palettes."
 license = "MIT"
 resolver = "declarative"
 save_compatibility = "shared"
@@ -14,8 +14,8 @@ rom_sha1 = "5101ddf223d1d918928fe1f306b63a42ada14a5e"
 
 [[feature]]
 id = "palette-restoration"
-name = "Original Color Palette"
-description = "Restore covered Super Mario World palettes. Your selected display filter is preserved; the GBA title and Mario Bros. palettes remain unchanged."
+name = "SNES-style Colors"
+description = "Restore covered game colors on the next launch. Your display filter is preserved; the GBA title, game selection and Mario Bros. colors remain unchanged."
 group = "Display"
 default_enabled = false
 
