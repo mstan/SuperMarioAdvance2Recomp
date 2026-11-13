@@ -63,10 +63,11 @@ target_link_libraries(SuperMarioWorldRecomp PRIVATE
     "-Wl,--end-group")
 
 target_compile_definitions(SuperMarioWorldRecomp PRIVATE
-    GBARECOMP_GAME_VERSION="${GAME_BUILD_VERSION}"
     GBARECOMP_DEFAULT_DEBUG_PORT=19877
     GBARECOMP_WINDOW_TITLE="SuperMarioWorldRecomp"
     GBARECOMP_DEFAULT_GAME_CONFIG="game.toml")
+set_property(SOURCE src/main.cpp APPEND PROPERTY COMPILE_DEFINITIONS
+    GBARECOMP_GAME_VERSION="${GAME_BUILD_VERSION}")
 
 option(GBAGAME_RECOMP_UI "Build the recomp-ui pre-boot launcher" ON)
 if(GBAGAME_RECOMP_UI)
