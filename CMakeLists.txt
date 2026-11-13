@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
-project(SuperMarioWorldRecomp C CXX)
+project(SuperMarioWorldRecomp VERSION 0.0.5 LANGUAGES C CXX)
+set(GAME_BUILD_VERSION "${PROJECT_VERSION}" CACHE STRING "Packaged game version")
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 20)
@@ -20,6 +21,7 @@ if(NOT EXISTS "${GBARECOMP_ROOT}/CMakeLists.txt")
         "Configure with -DGBARECOMP_ROOT=<path> if the local worktree link is absent.")
 endif()
 
+set(GBARECOMP_ENABLE_HQ2X ON CACHE BOOL "Include the optional HQ2x display mod" FORCE)
 add_subdirectory("${GBARECOMP_ROOT}" gbarecomp_build EXCLUDE_FROM_ALL)
 
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/generated/recompiled.cpp")
@@ -36,6 +38,7 @@ add_executable(SuperMarioWorldRecomp
     src/smw_extended_view.cpp
     src/mods/smw_adaptive_view_plugin.cpp
     ${GAME_GENERATED_SOURCES})
+gbarecomp_stage_hq2x(SuperMarioWorldRecomp)
 
 set(GAME_RECOMPILED_SOURCES ${GAME_GENERATED_SOURCES})
 list(FILTER GAME_RECOMPILED_SOURCES INCLUDE REGEX
@@ -63,6 +66,8 @@ target_compile_definitions(SuperMarioWorldRecomp PRIVATE
     GBARECOMP_DEFAULT_DEBUG_PORT=19877
     GBARECOMP_WINDOW_TITLE="SuperMarioWorldRecomp"
     GBARECOMP_DEFAULT_GAME_CONFIG="game.toml")
+set_property(SOURCE src/main.cpp APPEND PROPERTY COMPILE_DEFINITIONS
+    GBARECOMP_GAME_VERSION="${GAME_BUILD_VERSION}")
 
 option(GBAGAME_RECOMP_UI "Build the recomp-ui pre-boot launcher" ON)
 if(GBAGAME_RECOMP_UI)
@@ -85,7 +90,7 @@ if(GBAGAME_RECOMP_UI)
         COMPILE_DEFINITIONS GBAGAME_RECOMP_UI)
 endif()
 
-# Ship the game-owned, disabled-by-default adaptive-view package beside the
+# Ship the game-owned adaptive-view and optional HQ2x packages beside the
 # executable. User-installed .gbamod archives join this same catalog.
 set(SMW_PRELOADED_MODS "${CMAKE_CURRENT_SOURCE_DIR}/mods/preloaded")
 if(EXISTS "${SMW_PRELOADED_MODS}/packages")

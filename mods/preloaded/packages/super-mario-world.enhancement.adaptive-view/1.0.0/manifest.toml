@@ -17,7 +17,7 @@ id = "adaptive-view"
 name = "Adaptive Widescreen"
 description = "Expand the logical view from native 3:2 up to 9:5, following the live window or fullscreen aspect ratio."
 group = "Display"
-default_enabled = false
+default_enabled = true
 
 [[plugin]]
 feature = "adaptive-view"

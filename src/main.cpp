@@ -28,14 +28,16 @@ int main(int argc, char** argv) {
     opts.mod_owns_adaptive_view = true;
 
     // Super Mario World's renderer streams scrolling tile maps around the
-    // native viewport. Adaptive view exposes the useful surrounding columns
-    // while keeping the original 240x160 mode as the faithful default.
+    // native viewport. Adaptive view exposes the useful surrounding columns;
+    // the Mods catalog retains a player's choice to use the original view.
+    opts.max_view_width = 288;
     opts.max_resize_view_width = 288;
     opts.resize_driven_view = true;
     opts.launcher_expose_widescreen = false;
     opts.launcher_expose_adaptive_view = false;
     opts.extended_view_init = smw::install_extended_view;
 
+    opts.launcher_game_version = GBARECOMP_GAME_VERSION;
     opts.launcher_region = "USA";
     opts.launcher_game_config = "game.toml";
     opts.launcher_save_path = "saves/super_mario_world_usa.sav";

@@ -1,0 +1,24 @@
+format_version = 1
+id = "super-mario-world.enhancement.hq2x"
+version = "1.0.0"
+name = "HQ2x Pixel Filter"
+author = "mstan"
+description = "Optional edge-aware pixel smoothing using the original HQ2x algorithm."
+license = "MIT"
+resolver = "declarative"
+save_compatibility = "shared"
+
+[[target]]
+game_id = "super-mario-world-us"
+rom_sha1 = "5101ddf223d1d918928fe1f306b63a42ada14a5e"
+
+[[feature]]
+id = "hq2x"
+name = "HQ2x Pixel Filter"
+description = "Smooth pixel edges before scaling the picture to the window. Uses additional CPU time and memory. Turn off to keep the existing pixel presentation."
+group = "Display"
+default_enabled = false
+
+[[plugin]]
+feature = "hq2x"
+id = "gba.presentation.hq2x"

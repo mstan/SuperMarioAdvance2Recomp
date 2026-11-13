@@ -8,6 +8,7 @@ void reset_adaptive_view() {
 
 void activate_adaptive_view() {
     (void)gba_mod_set_adaptive_view_enabled(1);
+    (void)gba_mod_set_view_width(288);
 }
 
 }  // namespace
