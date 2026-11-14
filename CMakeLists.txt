@@ -21,7 +21,7 @@ if(NOT EXISTS "${GBARECOMP_ROOT}/CMakeLists.txt")
         "Configure with -DGBARECOMP_ROOT=<path> if the local worktree link is absent.")
 endif()
 
-set(GBARECOMP_ENABLE_HQ2X ON CACHE BOOL "Include the optional HQ2x display mod" FORCE)
+set(GBARECOMP_ENABLE_HQ2X ON CACHE BOOL "Include the optional HQx display mod" FORCE)
 add_subdirectory("${GBARECOMP_ROOT}" gbarecomp_build EXCLUDE_FROM_ALL)
 
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/generated/recompiled.cpp")
@@ -37,6 +37,7 @@ add_executable(SuperMarioWorldRecomp
     src/main.cpp
     src/smw_extended_view.cpp
     src/mods/smw_adaptive_view_plugin.cpp
+    src/mods/hqx_plugin.cpp
     ${GAME_GENERATED_SOURCES})
 gbarecomp_stage_hq2x(SuperMarioWorldRecomp)
 
