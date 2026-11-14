@@ -37,9 +37,11 @@ add_executable(SuperMarioWorldRecomp
     src/main.cpp
     src/smw_extended_view.cpp
     src/mods/smw_adaptive_view_plugin.cpp
-    src/mods/hqx_plugin.cpp
     ${GAME_GENERATED_SOURCES})
 gbarecomp_stage_hq2x(SuperMarioWorldRecomp)
+if(TARGET gbarecomp_hqx)
+    target_sources(SuperMarioWorldRecomp PRIVATE src/mods/hqx_plugin.cpp)
+endif()
 
 set(GAME_RECOMPILED_SOURCES ${GAME_GENERATED_SOURCES})
 list(FILTER GAME_RECOMPILED_SOURCES INCLUDE REGEX
