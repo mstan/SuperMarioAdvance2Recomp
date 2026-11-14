@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(SuperMarioWorldRecomp VERSION 0.0.5 LANGUAGES C CXX)
+project(SuperMarioWorldRecomp VERSION 0.0.6 LANGUAGES C CXX)
 set(GAME_BUILD_VERSION "${PROJECT_VERSION}" CACHE STRING "Packaged game version")
 
 set(CMAKE_C_STANDARD 11)
