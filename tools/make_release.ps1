@@ -120,7 +120,7 @@ $hqx = Join-Path $build 'gbarecomp-hqx.dll'
 $hqxSource = Join-Path $build 'third-party/hqx'
 if (-not (Test-Path -LiteralPath $hqx) -or
     -not (Test-Path -LiteralPath (Join-Path $hqxSource 'COPYING'))) {
-    throw 'The HQ2x shared library and corresponding source are required.'
+    throw 'The HQx shared library and corresponding source are required.'
 }
 Copy-Item -LiteralPath $hqx -Destination $stage
 New-Item -ItemType Directory -Path (Join-Path $stage 'third-party') | Out-Null
@@ -158,7 +158,7 @@ if ($LASTEXITCODE -ne 0) {
 # Super Mario Advance 2: Super Mario World - Windows x64
 
 This experimental v$Version preview runs the USA/Australia retail game through
-gbarecomp with the recomp-ui launcher, Adaptive Widescreen, and optional HQ2x.
+gbarecomp with the recomp-ui launcher, Adaptive Widescreen, and optional Pixel Smoothing.
 
 ## How to run
 
@@ -169,7 +169,8 @@ gbarecomp with the recomp-ui launcher, Adaptive Widescreen, and optional HQ2x.
    Expected SHA-1: $expectedSha1
 4. Select your legally obtained retail 16 KiB gba_bios.bin.
 5. Configure display and controls, then select PLAY. Adaptive Widescreen is on
-   for new installations; the optional HQ2x filter can be enabled under Mods.
+   for new installations. Enable Pixel Smoothing under Mods and select HQ2x,
+   HQ3x or HQ4x before Play if desired; smoothing is off by default.
 
 The ROM and retail GBA BIOS are not included. Supply your own dumps.
 

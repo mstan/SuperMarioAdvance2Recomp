@@ -43,7 +43,9 @@ safe area, while supported gameplay scenes can expand up to 9:5. Some scenes
 intentionally retain the original view where the game does not prepare enough
 off-screen level or actor data.
 
-For smoother pixel edges, enable **HQ2x** in the launcher's **Mods** page. This
+For smoother pixel edges, enable **Pixel Smoothing** in the launcher's **Mods**
+page and select HQ2x, HQ3x or HQ4x before Play. Existing HQ2x selections keep
+HQ2x. This
 optional display filter is disabled by default and leaves game behavior unchanged.
 It uses additional CPU time and memory. The replaceable filter library and its
 LGPL source are included under `third-party/hqx`.
