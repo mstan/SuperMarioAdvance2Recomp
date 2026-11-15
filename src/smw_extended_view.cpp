@@ -1,11 +1,13 @@
 #include "smw_extended_view.h"
 
+#include <algorithm>
 #include <cstdio>
 #include <cstdlib>
 
 #include "gba_bus.h"
 #include "gba_ppu.h"
 #include "runtime_bus_bridge.h"
+#include "runtime.h"
 
 extern "C" unsigned g_ws_extra_left;
 
@@ -39,24 +41,18 @@ void trace_scene_once() {
     std::fprintf(stderr,
         "[smw:extended-view] frame=%llu DISPCNT=%04X "
         "BG=%04X/%04X/%04X/%04X WIN=%04X/%04X/%04X/%04X "
-        "authored=%d pillarbox=%d/%d/%d\n",
+        "authored=%d pillarbox=%d/%d/%d native_left=%d\n",
         g_runtime_vblank_starts, read16(0x00), read16(0x08),
         read16(0x0A), read16(0x0C), read16(0x0E), read16(0x40),
         read16(0x42), read16(0x48), read16(0x4A),
         gba::g_ws_authored_margin_layers, gba::g_ws_pillarbox,
-        gba::g_ws_pillarbox_left, gba::g_ws_pillarbox_right);
+        gba::g_ws_pillarbox_left, gba::g_ws_pillarbox_right,
+        gba::g_ws_native_view_left);
 }
 
 int streamed_tilemap_provider(int bg, int hw_x, int screen_y,
                               std::uint16_t* out_entry) {
     trace_scene_once();
-    if (gba::GbaBus* bus = gbarecomp::active_bus()) {
-        // The title uses wrapped sprite pieces just outside native X as part
-        // of the centered logo. Expanding that staging area exposes garbage,
-        // so retain a faithful centered title and reopen the margins as soon
-        // as the game switches to a scrolling map/gameplay layout.
-        gba::g_ws_pillarbox = title_layout(bus->io().raw()) ? 1 : 0;
-    }
     // SMA2 maintains its scrolling regular backgrounds as hardware tile maps
     // and streams new rows/columns through UpdateVramTileMaps (08001838).
     // Explicitly accepting the renderer's computed map entry also authorizes
@@ -87,8 +83,18 @@ int bounded_bg_x(int bg, int output_x, int screen_y, int* out_hw_x) {
     // sides. Sampling beyond its ring can leak stale tiles (the title screen's
     // left edge is the visible example), so extend its authentic edge pixel.
     // 512-pixel maps retain the normal off-screen continuation.
+    const int centered_left = static_cast<int>(g_ws_extra_left);
+    const int world_left = gba::g_ws_native_view_left >= 0
+        ? gba::g_ws_native_view_left : centered_left;
+    // The status bar is two tile rows of BG3, not world geometry. Keep its
+    // original centered placement while all world layers and OBJ use the
+    // renderer's single native-view origin, including its clipping bounds.
+    if (bg == 3 && screen_y < 16 && world_left != centered_left) {
+        *out_hw_x = std::clamp(output_x - centered_left, 0, 239);
+        return 1;
+    }
     if ((bgcnt & 0x4000u) == 0) {
-        const int left = static_cast<int>(g_ws_extra_left);
+        const int left = world_left;
         if (output_x < left) {
             *out_hw_x = 0;
             return 1;
@@ -102,6 +108,51 @@ int bounded_bg_x(int bg, int output_x, int screen_y, int* out_hw_x) {
 }
 
 }  // namespace
+
+void update_extended_view(const gbarecomp::ExtendedViewFrameInfo* frame) {
+    // Presentation state only: never change the guest camera, tile stream or
+    // actor coordinates. The shared renderer applies this origin to BG/OBJ,
+    // hardware windows and expanded culling together; native width ignores it.
+    gba::g_ws_native_view_left = -1;
+    gba::g_ws_pillarbox = 0;
+    auto* bus = gbarecomp::active_bus();
+    if (!frame || !bus) return;
+    if (title_layout(bus->io().raw())) {
+        gba::g_ws_pillarbox = 1;
+        return;
+    }
+    if (frame->view_width <= 240) return;
+    const auto* ram = bus->iwram_ptr();
+    auto read16 = [&](unsigned at) {
+        return unsigned(ram[at]) | (unsigned(ram[at + 1]) << 8);
+    };
+    auto read32 = [&](unsigned at) {
+        return read16(at) | (read16(at + 2) << 16);
+    };
+    // USA AA2E: the main game owns a dynamically allocated level block.
+    // Normal gameplay is state24; menus and transitions retain their own view.
+    if (ram[0x79F8] != 1 || ram[0x2BC6] != 0x24) return;
+    const auto level = read32(0x3F98);
+    if (level < 0x03000000u || level > 0x03008000u - 0x1176u) return;
+    const auto offset = level - 0x03000000u;
+    const unsigned screens = ram[offset + 0x1175];
+    const bool vertical = (read16(offset + 0x1E) & 1u) != 0;
+    // A fixed single-screen room has no complete authored wide viewport.
+    // Keep its authentic native framing, also for vertical-only layouts whose
+    // horizontal camera bounds are not described by the screen count.
+    if (vertical || screens == 1) {
+        gba::g_ws_pillarbox = 1;
+        return;
+    }
+    if (screens < 2 || screens > 32) return;
+    const int width = int(screens * 256u);
+    const int camera = int(read16(0x2C04));
+    if (camera < 0 || camera > width - 240) return;
+    const int desired_origin = camera - int(frame->extra_left);
+    const int world_origin = std::clamp(desired_origin, 0,
+        std::max(0, width - int(frame->view_width)));
+    gba::g_ws_native_view_left = camera - world_origin;
+}
 
 void install_extended_view(std::uint32_t, std::uint32_t) {
     g_previous_tilemap_provider = gba::g_ws_tilemap_provider;
