@@ -197,6 +197,15 @@ foreach ($notice in $fontNotices) {
     $engine $uiRoot (Join-Path $stage 'licenses') --mingw (Split-Path $mingwBin)
 if ($LASTEXITCODE -ne 0) { throw 'Dependency notice staging failed.' }
 
+# TinyCC's bundled usage files refer to COPYING beside the executable.
+$tinyCcLicense = Join-Path $stage 'licenses/TinyCC/COPYING'
+if ((Get-FileHash -LiteralPath $tinyCcLicense -Algorithm SHA256).Hash -ne
+        '512d2d21b6b3384ba64781abb0208a1b87740bc31e2df48e2b206ddb7e4d5779') {
+    throw 'TinyCC 0.9.27 license checksum differs.'
+}
+Copy-Item -LiteralPath $tinyCcLicense -Destination (Join-Path $stage 'overlay_toolchain/tcc/COPYING')
+
+
 $forbidden = Get-ChildItem -LiteralPath $stage -Recurse -File |
     Where-Object {
         $_.Extension.ToLowerInvariant() -in @(
