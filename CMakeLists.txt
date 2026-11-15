@@ -6,6 +6,14 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+include(CTest)
+if(BUILD_TESTING)
+    add_executable(sma2_restoration_patch_test
+        tests/restoration_patch_test.cpp src/smw_restoration_patch.cpp)
+    target_include_directories(sma2_restoration_patch_test PRIVATE src)
+    add_test(NAME sma2_restoration_patch COMMAND sma2_restoration_patch_test)
+endif()
+
 set(GBARECOMP_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/gbarecomp"
     CACHE PATH "Path to this game's gbarecomp worktree")
 set(RECOMP_UI_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/recomp-ui"
@@ -37,6 +45,8 @@ add_executable(SuperMarioWorldRecomp
     src/main.cpp
     src/smw_extended_view.cpp
     src/mods/smw_adaptive_view_plugin.cpp
+    src/mods/smw_restoration_plugin.cpp
+    src/smw_restoration_patch.cpp
     ${GAME_GENERATED_SOURCES})
 gbarecomp_stage_hq2x(SuperMarioWorldRecomp)
 

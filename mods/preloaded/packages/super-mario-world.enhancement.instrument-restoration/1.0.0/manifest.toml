@@ -1,0 +1,42 @@
+format_version = 1
+id = "super-mario-world.enhancement.instrument-restoration"
+version = "1.0.0"
+name = "Restored Bongos and Horn"
+author = "mstan"
+description = "Optional restored Yoshi bongos and a lower-pitched horn."
+license = "MIT"
+resolver = "declarative"
+save_compatibility = "shared"
+
+[[target]]
+game_id = "super-mario-world-us"
+rom_sha1 = "5101ddf223d1d918928fe1f306b63a42ada14a5e"
+
+[[feature]]
+id = "instrument-restoration"
+name = "Restored Bongos and Horn"
+description = "Use restored Yoshi bongos and the lower-pitched horn on the next launch. Changes these two instruments, without replacing the soundtrack."
+group = "Audio"
+default_enabled = false
+
+[[plugin]]
+feature = "instrument-restoration"
+id = "super-mario-world.restore-instruments"
+
+[[asset]]
+feature = "instrument-restoration"
+id = "bongo-patch"
+name = "USA Bongo Restoration 1.0 IPS"
+sha1 = "b83352df126919706e3618ba4976471a32c5fc99"
+size = 4040
+extensions = ["ips"]
+purpose = "Select the USA restored-bongo IPS from Weario's Instrument Restoration 1.0 release. The patch is not included."
+
+[[asset]]
+feature = "instrument-restoration"
+id = "horn-patch"
+name = "USA Horn Restoration 1.0 IPS"
+sha1 = "96480df7633dd760dd47efe08470867fcc209482"
+size = 15
+extensions = ["ips"]
+purpose = "Select the USA restored-horn IPS from Weario's Instrument Restoration 1.0 release. The patch is not included."
