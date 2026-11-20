@@ -50,6 +50,10 @@ optional display filter is disabled by default and leaves game behavior unchange
 It uses additional CPU time and memory. The replaceable filter library and its
 LGPL source are included under `third-party/hqx`.
 
+The Mods page also includes **SNES-style Colors** by Asaki and **Restored Bongos
+and Horn** by Weario. Enable either control before Play; no separate patch file
+is needed. See [restoration details and credits](docs/RESTORATION.md).
+
 ## Features
 
 - Native Windows x64 application
@@ -86,7 +90,9 @@ cd SuperMarioAdvance2Recomp
 cmake -S gbarecomp -B gbarecomp/build -G Ninja
 cmake --build gbarecomp/build --target gba_recompile
 pwsh tools/regen.ps1
-cmake -S . -B build -G Ninja
+cmake -S . -B build -G Ninja `
+  -DSMW_COLOR_RESTORATION_ARCHIVE="<Color Restoration 0.91 ZIP>" `
+  -DSMW_INSTRUMENT_RESTORATION_ARCHIVE="<Instrument Restoration 1.0 ZIP>"
 cmake --build build --target SuperMarioWorldRecomp
 ```
 
@@ -97,8 +103,8 @@ code, copyrighted inputs, saves, and build output remain local and are never
 included in releases.
 
 Contributors can run `pwsh tools/coverage-attract.ps1` for the automated native
-acceptance route and `pwsh tools/make_release.ps1 -Version 0.0.3` to build a
-sanitized Windows package.
+acceptance route. The Windows release helper also requires the two original
+author archives; see [restoration build instructions](docs/RESTORATION.md).
 
 ## License
 
