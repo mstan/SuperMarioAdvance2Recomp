@@ -1,6 +1,8 @@
-# Super Mario Advance 2 v0.0.7 - Windows x64
+# Super Mario Advance 2 v0.0.8 - Windows x64
 
-Adds separate optional SNES-style Colors and Restored Bongos and Horn through Mods. Supply the exact supported external patches when enabling restoration; original ROM and patch files are not bundled. Restoration remains off by default.
+SNES-style Colors by Asaki and Restored Bongos and Horn by Weario are independent, self-contained Mods toggles. No separate patch selection is needed. Both enhancements remain off by default; original author credits and notices are included.
+
+Gameplay Diagnostics now exposes Record Gameplay in Mods. Recording starts on by default, remembers On or Off independently of presentation choices, and preserves an existing recording preference.
 
 Optional pixel smoothing now offers HQ2x, HQ3x and HQ4x. Existing HQ2x selections remain valid, and a fresh installation keeps the filter off. Adaptive Widescreen starts with Fit to screen; saved display and mod choices remain authoritative. The original frontlit screen model and native saves are preserved.
 

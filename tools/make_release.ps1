@@ -178,6 +178,8 @@ gbarecomp with the recomp-ui launcher, Adaptive Widescreen, and optional Pixel S
    HQ3x or HQ4x before Play if desired; smoothing is off by default.
 6. Optional SNES-style Colors by Asaki and Restored Bongos and Horn by Weario
    are also in Mods. Their data is included; no IPS file is needed.
+7. Gameplay Diagnostics > Record Gameplay is on by default in Mods. Turn it
+   off there if desired; its saved choice is independent of display mods.
 
 The ROM and retail GBA BIOS are not included. Supply your own dumps.
 
