@@ -6,7 +6,8 @@ catalog, MinGW/SDL runtime DLLs, and the overlay toolchain. It never contains
 a ROM, retail GBA BIOS, save data, generated source, or developer config.
 
 Usage:
-  pwsh tools\make_release.ps1 -Version 0.0.1
+  pwsh tools\make_release.ps1 -Version <version> `
+    -ColorRestorationArchive <color.zip> -InstrumentRestorationArchive <instruments.zip>
 #>
 param(
     [Parameter(Mandatory = $true)][string]$Version,
@@ -14,6 +15,8 @@ param(
     [string]$GbarecompRoot = '',
     [string]$RecompUiRoot = '',
     [string]$GeneratedBiosDir = '',
+    [Parameter(Mandatory = $true)][string]$ColorRestorationArchive,
+    [Parameter(Mandatory = $true)][string]$InstrumentRestorationArchive,
     [ValidateRange(1, 32)][int]$Jobs = 4
 )
 
@@ -81,6 +84,8 @@ New-Item -ItemType Directory -Force -Path $out | Out-Null
     "-DGBARECOMP_GENERATED_BIOS_DIR=$generatedBios" `
     "-DCMAKE_CXX_FLAGS_RELEASE=-O3 -DNDEBUG" `
     -DGBARECOMP_ROOT="$engine" `
+    "-DSMW_COLOR_RESTORATION_ARCHIVE=$((Resolve-Path -LiteralPath $ColorRestorationArchive).Path)" `
+    "-DSMW_INSTRUMENT_RESTORATION_ARCHIVE=$((Resolve-Path -LiteralPath $InstrumentRestorationArchive).Path)" `
     -DRECOMP_UI_ROOT="$uiRoot" `
     -DGBARECOMP_RUNTIME_UI_ROOT="$uiRoot" `
     -DGBARECOMP_BUILD_ORACLE=OFF `
@@ -171,6 +176,10 @@ gbarecomp with the recomp-ui launcher, Adaptive Widescreen, and optional Pixel S
 5. Configure display and controls, then select PLAY. Adaptive Widescreen is on
    for new installations. Enable Pixel Smoothing under Mods and select HQ2x,
    HQ3x or HQ4x before Play if desired; smoothing is off by default.
+6. Optional SNES-style Colors by Asaki and Restored Bongos and Horn by Weario
+   are also in Mods. Their data is included; no IPS file is needed.
+7. Gameplay Diagnostics > Record Gameplay is on by default in Mods. Turn it
+   off there if desired; its saved choice is independent of display mods.
 
 The ROM and retail GBA BIOS are not included. Supply your own dumps.
 
@@ -195,7 +204,12 @@ foreach ($notice in $fontNotices) {
 }
 & (Get-Command python.exe).Source (Join-Path $root 'tools/collect_licenses.py') `
     $engine $uiRoot (Join-Path $stage 'licenses') --mingw (Split-Path $mingwBin)
-if ($LASTEXITCODE -ne 0) { throw 'Dependency notice staging failed.' }
+if ($LASTEXITCODE -ne 0) { throw "License collection failed ($LASTEXITCODE)." }
+$restorationNotices = Join-Path $stage 'licenses/restoration'
+New-Item -ItemType Directory -Path $restorationNotices -ErrorAction Stop | Out-Null
+foreach ($notice in @('Asaki-Color-Restoration.txt', 'Weario-Instrument-Restoration.txt')) {
+    Copy-Item -LiteralPath (Join-Path $build "restoration-data/notices/$notice") -Destination $restorationNotices
+}
 
 # TinyCC's bundled usage files refer to COPYING beside the executable.
 $tinyCcLicense = Join-Path $stage 'licenses/TinyCC/COPYING'
@@ -209,7 +223,7 @@ Copy-Item -LiteralPath $tinyCcLicense -Destination (Join-Path $stage 'overlay_to
 $forbidden = Get-ChildItem -LiteralPath $stage -Recurse -File |
     Where-Object {
         $_.Extension.ToLowerInvariant() -in @(
-            '.gba', '.agb', '.bin', '.sav', '.srm', '.apk'
+            '.gba', '.agb', '.bin', '.sav', '.srm', '.apk', '.ips', '.7z', '.zip'
         ) -or
         $_.Name -in @(
             'rom.cfg',
@@ -225,7 +239,7 @@ if ($forbidden) {
 }
 
 if (Test-Path -LiteralPath $zip) {
-    Remove-Item -LiteralPath $zip -Force
+    Remove-Item -LiteralPath $zip -ErrorAction Stop
 }
 Add-Type -AssemblyName System.IO.Compression
 Add-Type -AssemblyName System.IO.Compression.FileSystem
@@ -286,6 +300,11 @@ try {
     foreach ($notice in $fontNotices) {
         if ($null -eq $rzArchive.GetEntry("licenses/fonts/$notice")) {
             throw "Bundled font notice missing: $notice"
+        }
+    }
+    foreach ($notice in @('Asaki-Color-Restoration.txt', 'Weario-Instrument-Restoration.txt')) {
+        if ($null -eq $rzArchive.GetEntry("licenses/restoration/$notice")) {
+            throw "Restoration author notice missing: $notice"
         }
     }
     if ($rzArchive.Entries.Count -ne $rzFiles.Count) {

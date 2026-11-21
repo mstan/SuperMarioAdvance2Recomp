@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(SuperMarioWorldRecomp VERSION 0.0.7 LANGUAGES C CXX)
+project(SuperMarioWorldRecomp VERSION 0.0.8 LANGUAGES C CXX)
 set(GAME_BUILD_VERSION "${PROJECT_VERSION}" CACHE STRING "Packaged game version")
 
 set(CMAKE_C_STANDARD 11)
@@ -29,6 +29,31 @@ if(NOT EXISTS "${GBARECOMP_ROOT}/CMakeLists.txt")
         "Configure with -DGBARECOMP_ROOT=<path> if the local worktree link is absent.")
 endif()
 
+# Maintainer inputs stay outside the repository. The verified data is built
+# into the executable, so players never need to find or select an IPS file.
+set(SMW_COLOR_RESTORATION_ARCHIVE "" CACHE FILEPATH "Original Color Restoration 0.91 archive")
+set(SMW_INSTRUMENT_RESTORATION_ARCHIVE "" CACHE FILEPATH "Original Instrument Restoration 1.0 archive")
+foreach(archive SMW_COLOR_RESTORATION_ARCHIVE SMW_INSTRUMENT_RESTORATION_ARCHIVE)
+    if(NOT EXISTS "${${archive}}")
+        message(FATAL_ERROR "${archive} must name the original author ZIP; see docs/RESTORATION.md for build instructions.")
+    endif()
+endforeach()
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+set(SMW_RESTORATION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/restoration-data/smw_restoration_payloads.h")
+set(SMW_RESTORATION_NOTICES "${CMAKE_CURRENT_BINARY_DIR}/restoration-data/notices")
+add_custom_command(
+    OUTPUT "${SMW_RESTORATION_HEADER}"
+        "${SMW_RESTORATION_NOTICES}/Asaki-Color-Restoration.txt"
+        "${SMW_RESTORATION_NOTICES}/Weario-Instrument-Restoration.txt"
+    COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tools/prepare_restoration_data.py"
+        --color-archive "${SMW_COLOR_RESTORATION_ARCHIVE}"
+        --instrument-archive "${SMW_INSTRUMENT_RESTORATION_ARCHIVE}"
+        --header "${SMW_RESTORATION_HEADER}" --notices "${SMW_RESTORATION_NOTICES}"
+    DEPENDS tools/prepare_restoration_data.py
+        "${SMW_COLOR_RESTORATION_ARCHIVE}" "${SMW_INSTRUMENT_RESTORATION_ARCHIVE}"
+    VERBATIM)
+add_custom_target(sma2_restoration_data DEPENDS "${SMW_RESTORATION_HEADER}")
+
 set(GBARECOMP_ENABLE_HQ2X ON CACHE BOOL "Include the optional HQx display mod" FORCE)
 add_subdirectory("${GBARECOMP_ROOT}" gbarecomp_build EXCLUDE_FROM_ALL)
 
@@ -48,6 +73,23 @@ add_executable(SuperMarioWorldRecomp
     src/mods/smw_restoration_plugin.cpp
     src/smw_restoration_patch.cpp
     ${GAME_GENERATED_SOURCES})
+add_dependencies(SuperMarioWorldRecomp sma2_restoration_data)
+target_include_directories(SuperMarioWorldRecomp PRIVATE
+    "${CMAKE_CURRENT_BINARY_DIR}/restoration-data")
+if(BUILD_TESTING)
+    add_executable(sma2_restoration_toggle_test tests/restoration_toggle_test.cpp
+        src/mods/smw_restoration_plugin.cpp src/smw_restoration_patch.cpp
+        "${GBARECOMP_ROOT}/src/gba/sha1.cpp")
+    add_dependencies(sma2_restoration_toggle_test sma2_restoration_data)
+    target_include_directories(sma2_restoration_toggle_test PRIVATE src
+        "${GBARECOMP_ROOT}/src/runtime" "${GBARECOMP_ROOT}/src/gba"
+        "${CMAKE_CURRENT_BINARY_DIR}/restoration-data")
+    add_test(NAME sma2_restoration_toggles COMMAND sma2_restoration_toggle_test)
+endif()
+add_custom_command(TARGET SuperMarioWorldRecomp POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${SMW_RESTORATION_NOTICES}"
+        "$<TARGET_FILE_DIR:SuperMarioWorldRecomp>/licenses/restoration"
+    COMMENT "Including original restoration author notices")
 gbarecomp_stage_hq2x(SuperMarioWorldRecomp)
 if(TARGET gbarecomp_hqx)
     target_sources(SuperMarioWorldRecomp PRIVATE src/mods/hqx_plugin.cpp)
